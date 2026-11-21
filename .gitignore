@@ -1,0 +1,31 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+venv/
+.env
+*.sqlite3
+
+# Django
+staticfiles/
+media/
+
+# React / Node
+node_modules/
+dist/
+
+# Environment files
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+
+# Logs
+*.log
+
+# Local database exports and backups
+sqlite_data.json
+db_backup*

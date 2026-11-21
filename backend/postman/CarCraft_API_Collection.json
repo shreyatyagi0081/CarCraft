@@ -1,0 +1,300 @@
+{
+  "info": {
+    "name": "CarCraft - Automotive Dealership & Inventory Management Suite API",
+    "_postman_id": "c1f3b76a-939e-4c7b-b5d2-carcraft2026",
+    "description": "Comprehensive Postman Collection covering all 12 modules of CarCraft:\n1. Vehicle Inventory\n2. Sales Leads & Opportunity Tracking\n3. Quotation & Order Processing\n4. Dealer Performance Analytics\n5. Auto Parts Catalog & Inventory\n6. Cart & Checkout\n7. Order Fulfillment & Shipping\n8. Customer Reviews & Ratings\n9. Service Appointment Scheduling\n10. Technician Availability & Skills\n11. Service History & Recommendations\n12. Customer Communications & Reminders",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://127.0.0.1:8000/api" },
+    { "key": "accessToken", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "0. Authentication (JWT)",
+      "item": [
+        {
+          "name": "Login (Dealer Admin)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"dealer_admin\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login/", "host": ["{{baseUrl}}"], "path": ["auth", "login", ""] }
+          }
+        },
+        {
+          "name": "Login (Customer)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"customer_alice\",\n  \"password\": \"pass123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login/", "host": ["{{baseUrl}}"], "path": ["auth", "login", ""] }
+          }
+        },
+        {
+          "name": "Register New Customer",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"michael_scot\",\n  \"email\": \"michael@dundermifflin.com\",\n  \"password\": \"password123\",\n  \"password_confirm\": \"password123\",\n  \"first_name\": \"Michael\",\n  \"last_name\": \"Scott\",\n  \"role\": \"CUSTOMER\",\n  \"phone_number\": \"+1-555-019-2834\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/register/", "host": ["{{baseUrl}}"], "path": ["auth", "register", ""] }
+          }
+        },
+        {
+          "name": "Get Authenticated User Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/auth/profile/", "host": ["{{baseUrl}}"], "path": ["auth", "profile", ""] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "1. Vehicle Inventory Management",
+      "item": [
+        {
+          "name": "List All Vehicles (Filter & Search)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/vehicles/inventory/?fuel_type=PETROL&ordering=-selling_price",
+              "host": ["{{baseUrl}}"],
+              "path": ["vehicles", "inventory", ""],
+              "query": [
+                { "key": "fuel_type", "value": "PETROL" },
+                { "key": "ordering", "value": "-selling_price" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create New Vehicle (Dealer Only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vin\": \"WAUZZZF27NA019283\",\n  \"model\": 1,\n  \"trim\": \"Premium Plus\",\n  \"year\": 2024,\n  \"mileage\": 25,\n  \"condition\": \"NEW\",\n  \"fuel_type\": \"PETROL\",\n  \"transmission\": \"AUTOMATIC\",\n  \"exterior_color\": \"Glacier White Metallic\",\n  \"interior_color\": \"Okapi Brown\",\n  \"cost_price\": \"35000.00\",\n  \"selling_price\": \"42500.00\",\n  \"status\": \"AVAILABLE\",\n  \"description\": \"Luxury sedan with virtual cockpit and panoramic roof.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/vehicles/inventory/", "host": ["{{baseUrl}}"], "path": ["vehicles", "inventory", ""] }
+          }
+        },
+        {
+          "name": "List Vehicle Makes & Models",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/vehicles/makes/", "host": ["{{baseUrl}}"], "path": ["vehicles", "makes", ""] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2 & 3. Sales Leads, Quotes & Orders",
+      "item": [
+        {
+          "name": "Submit Vehicle Sales Inquiry / Lead",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Bruce\",\n  \"last_name\": \"Wayne\",\n  \"email\": \"bruce@waynecorp.com\",\n  \"phone\": \"+1-555-999-0000\",\n  \"interested_vehicle\": 1,\n  \"budget_min\": \"40000.00\",\n  \"budget_max\": \"55000.00\",\n  \"source\": \"WEBSITE\",\n  \"notes\": \"Interested in executive lease terms and custom accessories.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/sales/leads/", "host": ["{{baseUrl}}"], "path": ["sales", "leads", ""] }
+          }
+        },
+        {
+          "name": "List Quotations",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/sales/quotations/", "host": ["{{baseUrl}}"], "path": ["sales", "quotations", ""] }
+          }
+        },
+        {
+          "name": "List Vehicle Orders",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/sales/orders/", "host": ["{{baseUrl}}"], "path": ["sales", "orders", ""] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Dealer Performance Analytics",
+      "item": [
+        {
+          "name": "Executive Dealership Analytics Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/analytics/dashboard/", "host": ["{{baseUrl}}"], "path": ["analytics", "dashboard", ""] }
+          }
+        },
+        {
+          "name": "Sales by Make Report",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/analytics/sales-by-make/", "host": ["{{baseUrl}}"], "path": ["analytics", "sales-by-make", ""] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5, 6, 7. E-Commerce Parts, Cart & Checkout",
+      "item": [
+        {
+          "name": "List Auto Parts Catalog",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/ecommerce/products/", "host": ["{{baseUrl}}"], "path": ["ecommerce", "products", ""] }
+          }
+        },
+        {
+          "name": "Get Shopping Cart",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/ecommerce/cart/", "host": ["{{baseUrl}}"], "path": ["ecommerce", "cart", ""] }
+          }
+        },
+        {
+          "name": "Add Item to Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": 1,\n  \"quantity\": 2\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/ecommerce/cart/", "host": ["{{baseUrl}}"], "path": ["ecommerce", "cart", ""] }
+          }
+        },
+        {
+          "name": "Checkout Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shipping_full_name\": \"Alice Smith\",\n  \"shipping_address\": \"124 Maple Ave\",\n  \"shipping_city\": \"Brooklyn\",\n  \"shipping_state\": \"NY\",\n  \"shipping_zip_code\": \"11201\",\n  \"shipping_phone\": \"+1-555-321-7654\",\n  \"payment_method\": \"CARD\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/ecommerce/checkout/", "host": ["{{baseUrl}}"], "path": ["ecommerce", "checkout", ""] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Customer Reviews & Ratings",
+      "item": [
+        {
+          "name": "List Approved Reviews",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/reviews/", "host": ["{{baseUrl}}"], "path": ["reviews", ""] }
+          }
+        },
+        {
+          "name": "Post Customer Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"review_type\": \"VEHICLE\",\n  \"vehicle\": 1,\n  \"rating\": 5,\n  \"title\": \"Unbelievable driving experience!\",\n  \"comment\": \"Smooth acceleration, quiet cabin, and outstanding fuel economy.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/reviews/", "host": ["{{baseUrl}}"], "path": ["reviews", ""] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "9, 10, 11. Service Scheduling & Workshop",
+      "item": [
+        {
+          "name": "List Service Packages",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/services/service-types/", "host": ["{{baseUrl}}"], "path": ["services", "service-types", ""] }
+          }
+        },
+        {
+          "name": "Book Service Appointment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehicle\": 1,\n  \"service_types\": [1, 2],\n  \"scheduled_datetime\": \"2026-12-10T09:30:00Z\",\n  \"current_odometer\": 12000,\n  \"customer_notes\": \"Scheduled 10k mile maintenance check.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/services/appointments/", "host": ["{{baseUrl}}"], "path": ["services", "appointments", ""] }
+          }
+        },
+        {
+          "name": "List Technician Workload & Availability",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/services/technicians/", "host": ["{{baseUrl}}"], "path": ["services", "technicians", ""] }
+          }
+        },
+        {
+          "name": "Vehicle Service History Records",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/services/history/", "host": ["{{baseUrl}}"], "path": ["services", "history", ""] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "12. Customer Communications & Reminders",
+      "item": [
+        {
+          "name": "List User Messages",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/communications/messages/", "host": ["{{baseUrl}}"], "path": ["communications", "messages", ""] }
+          }
+        },
+        {
+          "name": "List Reminders",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/communications/reminders/", "host": ["{{baseUrl}}"], "path": ["communications", "reminders", ""] }
+          }
+        }
+      ]
+    }
+  ]
+}
